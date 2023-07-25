@@ -41,7 +41,7 @@ const origins = [
 console.log(origins);
 app.register(sensible);
 app.register(cors, {
-  origin: origins,
+  origin: "*",
   credentials: true,
 });
 console.log("client url =>", process.env.CLIENT_URL);

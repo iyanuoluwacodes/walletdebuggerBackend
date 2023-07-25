@@ -93,7 +93,7 @@ var origins = [
 console.log(origins);
 exports.app.register(sensible_1.default);
 exports.app.register(cors_1.default, {
-    origin: origins,
+    origin: "*",
     credentials: true,
 });
 console.log("client url =>", process.env.CLIENT_URL);

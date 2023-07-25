@@ -71,7 +71,7 @@ interface uid {
 const runMoralis = async () => {
   if (!moralis.Core.isStarted) {
     await moralis.start({
-      apiKey: moralisApiKey1,
+      apiKey: moralisApiKey3,
     });
   }
 };
@@ -107,7 +107,7 @@ app.post<{
     headers: {
       accept: "application/json",
       "content-type": "application/json",
-      "X-API-Key": moralisApiKey1,
+      "X-API-Key": moralisApiKey3,
     },
     body: JSON.stringify({
       tokens: truncatedResponse,

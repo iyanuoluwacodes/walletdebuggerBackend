@@ -20,6 +20,8 @@ const moralisApiKey2 =
   "2IHfMlzIaRBflv7GliW3NzneyoAp3OgBXbE05hhKd3qfXo4otDbfZNw1AwH2SYO8";
 const moralisApiKey3 =
   "Ft1vyp44sxY7gqDm4qPiWBaPgLechkjUnKFPIn6jQBDHO5V0l0UOZnzNCoXZb1W2";
+
+const moralisKeys: string[] = [moralisApiKey1, moralisApiKey2, moralisApiKey3];
 const etherscanAPiKey1 = "NW9VZEP7IFW2ZQ4NYV6GPANWWX893ANUUE";
 const etherscanAPiKey2 = "QNKQHXZ31GI3F8NZAWVU4J6YSCQEV9J1BT";
 export const app: FastifyInstance<Server, IncomingMessage, ServerResponse> =
@@ -38,7 +40,7 @@ const origins = [
   "http://localhost:5174",
   "https://localhost:5174",
 ];
-console.log(origins);
+// console.log(origins);
 app.register(sensible);
 app.register(cors, {
   origin: "*",
@@ -71,8 +73,9 @@ interface uid {
 const runMoralis = async () => {
   if (!moralis.Core.isStarted) {
     await moralis.start({
-      apiKey: moralisApiKey2,
+      apiKey: moralisKeys[Number(process.env.MORALIS_KEY_INDEX)] || 2,
     });
+    console.log(process.env.MORALIS_KEY_INDEX);
   }
 };
 runMoralis();

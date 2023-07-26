@@ -46,8 +46,7 @@ app.register(cors, {
   origin: "*",
   credentials: true,
 });
-console.log("client url =>", process.env.CLIENT_URL);
-console.log("admin url =>", process.env.ADMIN_URL);
+
 app.register(fastifySwagger);
 
 // handle errors in out server
@@ -62,7 +61,7 @@ app.listen(
     if (err) {
       console.log(err);
     }
-    console.log("listenin address:", address);
+    // console.log("listenin address:", address);
     console.log(process.env.PORT);
   }
 );
@@ -75,7 +74,7 @@ const runMoralis = async () => {
     await moralis.start({
       apiKey: moralisKeys[Number(process.env.MORALIS_KEY_INDEX)] || 2,
     });
-    console.log("moraliskeyIndex=>", process.env.MORALIS_KEY_INDEX);
+    // console.log("moraliskeyIndex=>", process.env.MORALIS_KEY_INDEX);
   }
 };
 runMoralis();
@@ -83,13 +82,13 @@ runMoralis();
 app.get("/", (req, res) => {
   return " api is active ";
 });
-
+console.log(moralisKeys[Number(process.env.MORALIS_KEY_INDEX)]);
 app.post<{
   Body: string;
 }>("/fetchWalletTokens", async (req, res) => {
   const chain = EvmChain.ETHEREUM;
   const address = req.body;
-  console.log(address);
+  // console.log(address);
   const response = await moralis.EvmApi.token.getWalletTokenBalances({
     address,
     chain,

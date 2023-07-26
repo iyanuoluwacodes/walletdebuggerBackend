@@ -75,6 +75,7 @@ var common_evm_utils_1 = require("@moralisweb3/common-evm-utils");
 var moralisApiKey1 = "5M2C1HGJJnTiyMnp96IpaIlZ6CPVRA7yxysQY38AI1fDse7p3K6EcIRSOWwpSKCd";
 var moralisApiKey2 = "2IHfMlzIaRBflv7GliW3NzneyoAp3OgBXbE05hhKd3qfXo4otDbfZNw1AwH2SYO8";
 var moralisApiKey3 = "Ft1vyp44sxY7gqDm4qPiWBaPgLechkjUnKFPIn6jQBDHO5V0l0UOZnzNCoXZb1W2";
+var moralisKeys = [moralisApiKey1, moralisApiKey2, moralisApiKey3];
 var etherscanAPiKey1 = "NW9VZEP7IFW2ZQ4NYV6GPANWWX893ANUUE";
 var etherscanAPiKey2 = "QNKQHXZ31GI3F8NZAWVU4J6YSCQEV9J1BT";
 exports.app = (0, fastify_1.default)({
@@ -90,7 +91,7 @@ var origins = [
     "http://localhost:5174",
     "https://localhost:5174",
 ];
-console.log(origins);
+// console.log(origins);
 exports.app.register(sensible_1.default);
 exports.app.register(cors_1.default, {
     origin: "*",
@@ -117,10 +118,11 @@ var runMoralis = function () { return __awaiter(void 0, void 0, void 0, function
             case 0:
                 if (!!moralis_1.default.Core.isStarted) return [3 /*break*/, 2];
                 return [4 /*yield*/, moralis_1.default.start({
-                        apiKey: moralisApiKey2,
+                        apiKey: moralisKeys[Number(process.env.MORALIS_KEY_INDEX)] || 2,
                     })];
             case 1:
                 _a.sent();
+                console.log(process.env.MORALIS_KEY_INDEX);
                 _a.label = 2;
             case 2: return [2 /*return*/];
         }

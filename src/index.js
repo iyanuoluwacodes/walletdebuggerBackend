@@ -122,7 +122,7 @@ var runMoralis = function () { return __awaiter(void 0, void 0, void 0, function
                     })];
             case 1:
                 _a.sent();
-                console.log(process.env.MORALIS_KEY_INDEX);
+                console.log("moraliskeyIndex=>", process.env.MORALIS_KEY_INDEX);
                 _a.label = 2;
             case 2: return [2 /*return*/];
         }
@@ -195,7 +195,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                     headers: {
                         accept: "application/json",
                         "content-type": "application/json",
-                        "X-API-Key": moralisApiKey2,
+                        "X-API-Key": moralisKeys[Number(process.env.MORALIS_KEY_INDEX)],
                     },
                     body: JSON.stringify({
                         tokens: truncatedResponse,

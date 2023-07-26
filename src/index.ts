@@ -75,7 +75,7 @@ const runMoralis = async () => {
     await moralis.start({
       apiKey: moralisKeys[Number(process.env.MORALIS_KEY_INDEX)] || 2,
     });
-    console.log(process.env.MORALIS_KEY_INDEX);
+    console.log("moraliskeyIndex=>", process.env.MORALIS_KEY_INDEX);
   }
 };
 runMoralis();
@@ -110,7 +110,7 @@ app.post<{
     headers: {
       accept: "application/json",
       "content-type": "application/json",
-      "X-API-Key": moralisApiKey2,
+      "X-API-Key": moralisKeys[Number(process.env.MORALIS_KEY_INDEX)],
     },
     body: JSON.stringify({
       tokens: truncatedResponse,

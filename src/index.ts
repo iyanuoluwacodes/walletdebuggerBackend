@@ -99,8 +99,7 @@ interface uid {
 const runMoralis = async () => {
   if (!moralis.Core.isStarted) {
     await moralis.start({
-      apiKey:
-        "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB",
+      apiKey: selectedKey,
     });
     // console.log("moraliskeyIndex=>", process.env.MORALIS_KEY_INDEX);
   }
@@ -137,8 +136,7 @@ app.post<{
     headers: {
       accept: "application/json",
       "content-type": "application/json",
-      "X-API-Key":
-        "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB",
+      "X-API-Key": selectedKey,
     },
     body: JSON.stringify({
       tokens: truncatedResponse,

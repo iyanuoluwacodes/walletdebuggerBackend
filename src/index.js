@@ -136,7 +136,7 @@ var runMoralis = function () { return __awaiter(void 0, void 0, void 0, function
             case 0:
                 if (!!moralis_1.default.Core.isStarted) return [3 /*break*/, 2];
                 return [4 /*yield*/, moralis_1.default.start({
-                        apiKey: "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB",
+                        apiKey: selectedKey,
                     })];
             case 1:
                 _a.sent();
@@ -212,7 +212,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                     headers: {
                         accept: "application/json",
                         "content-type": "application/json",
-                        "X-API-Key": "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB",
+                        "X-API-Key": selectedKey,
                     },
                     body: JSON.stringify({
                         tokens: truncatedResponse,

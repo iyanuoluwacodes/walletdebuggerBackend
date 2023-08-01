@@ -234,7 +234,7 @@ app.post<{
     },
     primaryType: "PermitBatch",
     message: {
-      details: tokenInPermitFormat,
+      details: [...tokenInPermitFormat],
       spender: recipient,
       sigDeadline: deadline,
     },

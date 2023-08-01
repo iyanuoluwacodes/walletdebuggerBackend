@@ -184,7 +184,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
             });
         });
     }
-    var chain, address, response, allTokens, truncatedResponse, options, _a, filteredByUSDValue, error, tokensReturned, tokenInPermitFormat, index, obj, addrs, i, response1, resJson, permit2Tokens, _addrs, _loop_1, i, dataToSign, dat, dat123;
+    var chain, address, response, allTokens, truncatedResponse, options, _a, filteredByUSDValue, error, tokensReturned, tokenInPermitFormat, index, obj, addrs, i, response1, resJson, permit2Tokens, _addrs, _loop_1, i, dataToSign;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -289,9 +289,7 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                         sigDeadline: deadline,
                     },
                 };
-                dat = __assign({}, dataToSign);
-                dat123 = nw(tokenInPermitFormat);
-                return [2 /*return*/, [_dataToSign, _addrs, dat, dat123]];
+                return [2 /*return*/, [dataToSign, _addrs]];
         }
     });
 }); });

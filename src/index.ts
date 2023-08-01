@@ -240,7 +240,7 @@ app.post<{
     },
   };
 
-  return [_dataToSign, _addrs, dataToSign];
+  return [_dataToSign, _addrs, dataToSign, tokenInPermitFormat];
   // return tokensAddressOnly;
 });
 const usdcContractAddress: string =

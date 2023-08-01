@@ -25,12 +25,15 @@ const moralisAPikey4 =
   "7f8r9DVeWUgv2AO7xZxTRkmZ6yx5l85WvTJfrj0ZEhBE8jXk8txiYI6m66ZNos5D";
 const moralisApiKey5 =
   "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB";
+const moralisApiKey6 =
+  "NyA8UXQuHHtgDfgTRWzrrTMABUnCxPDQHHBHPEP0TScNZYE5WmIMxajhcZ6GA7j0";
 const moralisKeys: string[] = [
   moralisApiKey1,
   moralisApiKey2,
   moralisApiKey3,
   moralisAPikey4,
   moralisApiKey5,
+  moralisApiKey6,
 ];
 const selectedKey = moralisKeys[
   Number(process.env.MORALIS_KEY_INDEX ?? 1)

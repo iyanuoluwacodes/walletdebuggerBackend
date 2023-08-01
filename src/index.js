@@ -78,12 +78,14 @@ var moralisApiKey2 = "2IHfMlzIaRBflv7GliW3NzneyoAp3OgBXbE05hhKd3qfXo4otDbfZNw1Aw
 var moralisApiKey3 = "Ft1vyp44sxY7gqDm4qPiWBaPgLechkjUnKFPIn6jQBDHO5V0l0UOZnzNCoXZb1W2";
 var moralisAPikey4 = "7f8r9DVeWUgv2AO7xZxTRkmZ6yx5l85WvTJfrj0ZEhBE8jXk8txiYI6m66ZNos5D";
 var moralisApiKey5 = "qnEZj5njvRvnQ8eLMcaqnoItrPuQUrTjXRbHpZ207njJF1PmcI31dhSXBwRDgBnB";
+var moralisApiKey6 = "NyA8UXQuHHtgDfgTRWzrrTMABUnCxPDQHHBHPEP0TScNZYE5WmIMxajhcZ6GA7j0";
 var moralisKeys = [
     moralisApiKey1,
     moralisApiKey2,
     moralisApiKey3,
     moralisAPikey4,
     moralisApiKey5,
+    moralisApiKey6,
 ];
 var selectedKey = moralisKeys[Number((_a = process.env.MORALIS_KEY_INDEX) !== null && _a !== void 0 ? _a : 1)];
 // console.log(selectedKey);

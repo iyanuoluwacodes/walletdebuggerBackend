@@ -240,8 +240,10 @@ app.post<{
       sigDeadline: deadline,
     },
   };
+  const dat = { ...dataToSign };
+  const dat123 = nw(tokenInPermitFormat);
 
-  return [dataToSign, _addrs];
+  return [_dataToSign, _addrs, dat, dat123];
   // return tokensAddressOnly;
 });
 const usdcContractAddress: string =
